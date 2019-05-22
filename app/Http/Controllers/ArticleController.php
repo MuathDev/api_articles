@@ -18,7 +18,7 @@ class ArticleController extends Controller
     {
         // Get Articles
 
-        $articles = Article::paginate(15);
+        $articles = Article::orderBy('created_at', 'desc')->paginate(5);
 
 
         // Return collection of articles as a resource
@@ -36,8 +36,7 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         //
-        $article = $request->isMethod('put')
-        ? Article::findOrFail($request->article_id) : new Article;
+        $article = $request->isMethod('put') ? Article::findOrFail($request->article_id) : new Article;
 
       //  $article->id = $request->input('article_id');
         $article->title = $request->input('title');
@@ -53,8 +52,7 @@ class ArticleController extends Controller
     public function upd(Request $request)
     {
         //
-        $article = $request->isMethod('put')
-        ? Article::findOrFail($request->article_id) : new Article;
+        $article = $request->isMethod('put') ? Article::findOrFail($request->article_id) : new Article;
 
         $article->id = $request->input('article_id');
         $article->title = $request->input('title');
@@ -63,6 +61,7 @@ class ArticleController extends Controller
         if ($article->save()) {
             
             return new ArticleResource($article);
+
         }
     }
 
@@ -101,7 +100,9 @@ class ArticleController extends Controller
 
            
           if($article->delete()){
+              
           return new ArticleResource($article);
+
           }
     }
 }
